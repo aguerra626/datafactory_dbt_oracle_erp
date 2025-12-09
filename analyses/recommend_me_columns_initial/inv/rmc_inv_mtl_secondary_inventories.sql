@@ -1,0 +1,1 @@
+{{recommend_me_columns('mtl_secondary_inventories','organization_id=1213','msub')}}

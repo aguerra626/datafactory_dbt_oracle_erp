@@ -1,0 +1,1 @@
+{{recommend_me_columns('bom_operational_routings','organization_id=1213','bor')}}

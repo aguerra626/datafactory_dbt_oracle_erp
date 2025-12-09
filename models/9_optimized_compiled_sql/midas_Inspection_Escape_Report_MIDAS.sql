@@ -1,0 +1,131 @@
+--alter session set current_schema = apps; 
+-- 12/11/24 - added DD.quantity GET
+SELECT DD.CHARACTER1 "DEFECT DETAIL ID",
+        FU.USER_NAME "DD CREATED BY",
+       TRUNC (DD.CREATION_DATE) "DD CREATION DATE",
+       DD.CHARACTER2 "DD INSPECTED",
+       DD.CHARACTER3 "DD INSPECTED BY",
+       we.wip_entity_name "DD WIP JOB",
+	DD.Quantity as DD_Quantity, -- added 12/11/24 GET
+       (SELECT CASE
+                   WHEN dd.WIP_ENTITY_ID = RR.WIP_ENTITY_ID THEN 'Yes'
+                   ELSE 'No'
+               END
+          FROM DUAL)
+           "Same Job",
+       (SELECT CASE
+                   WHEN dd.WIP_ENTITY_ID = RR.WIP_ENTITY_ID AND dd.FROM_OP_SEQ_NUM = rr.FROM_OP_SEQ_NUM
+                   THEN 'Yes'
+                   ELSE 'No'
+               END
+          FROM DUAL) "Same Job Operation",
+       MSI.SEGMENT1 "ASSEMBLY NUMBER", --param
+       MSI.DESCRIPTION "ASSEM DESCRIPTION",
+       DD.FROM_OP_SEQ_NUM "DD FROM OP SEQ", 
+       DD.CHARACTER10 "DD SERIAL NUMBER",
+       (SELECT DDDEPT.DEPARTMENT_CODE
+          FROM BOM_DEPARTMENTS DDDEPT, WIP_OPERATIONS WOR
+         WHERE     WOR.WIP_ENTITY_ID = DD.WIP_ENTITY_ID
+               AND WOR.ORGANIZATION_ID = DD.ORGANIZATION_ID
+               AND WOR.DEPARTMENT_ID = DDDEPT.DEPARTMENT_ID
+               AND WOR.OPERATION_SEQ_NUM = DD.FROM_OP_SEQ_NUM
+               AND WOR.ORGANIZATION_ID = DDDEPT.ORGANIZATION_ID)
+        "DD DEPARTMENT",
+               (SELECT WOR.description
+          FROM WIP_OPERATIONS WOR
+         WHERE     WOR.WIP_ENTITY_ID = DD.WIP_ENTITY_ID
+               AND WOR.ORGANIZATION_ID = DD.ORGANIZATION_ID
+               AND WOR.OPERATION_SEQ_NUM = DD.FROM_OP_SEQ_NUM)
+        "DD FROM OP DESC",
+       SUBSTR (DD.CHARACTER18, 1, 1) "DEF_FIRST_CHAR",
+       DD.CHARACTER18 "DEFECT_TRACKER_DEFECT_CODE",
+       DD.CHARACTER19 "DEFECT_CODE_DESCRIPTION",
+       DD.CHARACTER24 "DT_CAUSED_BY",
+       DD.CHARACTER25 "DT_CAUSED_BY_DESCRIPTION",
+       DD.CHARACTER13 "AFFECTED_ASSEMBLY_MATERIAL",
+       DD.CHARACTER14 "AFFECTED_ASSY_SN",
+       DD.CHARACTER23 "PROBLEM_DESCRIPTION",
+       DD.COMMENT1 "PROBLEM_DESCRIPTION_LONG",
+       DD.CHARACTER21 "COMPONENT",
+       BCOMP.OPERATION_SEQ_NUM "COMP OP NUMBER",
+       dd.character20 "REF DESG",
+       RRW.WIP_ENTITY_NAME "RR WIP Job",
+       RR.from_op_seq_num "OP NUM", --param
+       --RRDEP.DEPARTMENT_CODE                             "DEPARTMENT",
+       RR.CHARACTER3 "WIP INSP RESULT",
+       RR.CHARACTER51 "INSPECTED BY", --param
+       TO_DATE (RR.CHARACTER52, 'YYYY/MM/DD') "INSPECTION_DATE", --param
+       RR.DEPARTMENT_ID, --param
+       (SELECT RRDEP.DEPARTMENT_CODE
+          FROM BOM_DEPARTMENTS RRDEP
+         WHERE RRDEP.DEPARTMENT_ID = RR.DEPARTMENT_ID)
+           "RR DEPARTMENT"
+  FROM QA_RESULTS                 DD,
+       WIP_ENTITIES               WE,
+       QA_PLANS                   QP,
+       MTL_PARAMETERS             MP,
+       MTL_SYSTEM_ITEMS_B         MSI,
+       MTL_SYSTEM_ITEMS_B         MSIAA,
+       MTL_SYSTEM_ITEMS_B         MSIAC,
+       BOM_STRUCTURES_B           BS,
+       BOM_COMPONENTS_B   BCOMP, -- original was BOM_INVENTORY_COMPONENTS
+       BOM_REFERENCE_DESIGNATORS  BREF,
+       QA_RESULTS                 RR,
+       WIP_ENTITIES               RRW,
+       FND_USER                   FU
+ WHERE     DD.WIP_ENTITY_ID = WE.WIP_ENTITY_ID
+       AND DD.QA_CREATED_BY = FU.USER_ID
+       AND DD.ITEM_ID = MSI.INVENTORY_ITEM_ID
+       AND DD.ORGANIZATION_ID = MSI.ORGANIZATION_ID
+       AND MP.ORGANIZATION_ID = QP.ORGANIZATION_ID
+       AND MP.ORGANIZATION_CODE = 'NSS'
+       AND QP.PLAN_ID = DD.PLAN_ID
+       AND QP.NAME = 'DEFECT DETAILS NSS'
+       AND DD.PLAN_ID = 5166
+       AND SUBSTR (DD.CHARACTER18, 1, 1) IN ('W', 'S', 'Q')
+       AND (DD.status IS NULL OR DD.status = 2)
+       AND DD.CHARACTER13 = MSIAA.SEGMENT1
+       AND DD.ORGANIZATION_ID = MSIAA.ORGANIZATION_ID
+       AND DD.CHARACTER21 = MSIAC.SEGMENT1
+       AND DD.ORGANIZATION_ID = MSIAC.ORGANIZATION_ID
+       AND MSIAA.INVENTORY_ITEM_ID = BS.ASSEMBLY_ITEM_ID
+       AND MSIAA.ORGANIZATION_ID = BS.ORGANIZATION_ID
+       AND MSIAC.INVENTORY_ITEM_ID = BCOMP.COMPONENT_ITEM_ID
+       AND BCOMP.BILL_SEQUENCE_ID = BS.BILL_SEQUENCE_ID
+       AND BCOMP.COMPONENT_SEQUENCE_ID = BREF.COMPONENT_SEQUENCE_ID
+       AND DD.CHARACTER20 = BREF.COMPONENT_REFERENCE_DESIGNATOR
+       AND DD.CREATION_DATE BETWEEN BCOMP.EFFECTIVITY_DATE AND NVL (BCOMP.DISABLE_DATE, SYSDATE + 1) -- thinking of not using this and return both old and new component but flag if exist old revision/ bill of material change
+       AND MSIAA.INVENTORY_ITEM_ID = RR.ITEM_ID
+       AND MSIAA.ORGANIZATION_ID = RR.ORGANIZATION_ID
+       AND RR.PLAN_ID = 5179                               --RESULTS RECORDING
+       AND DD.CHARACTER14 = RR.CHARACTER1 -- dd.character14: dd_cr_affected_assy_sn, rr.character1: rr_serial_number
+       AND RR.WIP_ENTITY_ID = RRW.WIP_ENTITY_ID
+       AND BCOMP.OPERATION_SEQ_NUM <= RR.from_op_seq_num
+       --AND DD.CREATION_DATE >= :p_INSP_START_DATE --TO_DATE ('01-JAN-23', 'DD-MON-YY')
+       --AND RR.last_update_DATE >= :p_INSP_START_DATE
+       --   AND TO_DATE('30-APR-23', 'DD-MON-YY')
+       --      AND ROWNUM<50000
+       --AND DD.CHARACTER1 = '8670676'
+       AND RR.FROM_OP_SEQ_NUM =
+           (SELECT MIN (RR2.from_op_seq_num)
+              FROM QA_RESULTS RR2
+             WHERE     RR2.PLAN_ID = RR.PLAN_ID
+                   AND RR2.WIP_ENTITY_ID = RR.WIP_ENTITY_ID
+                   AND RR2.ORGANIZATION_ID = RR.ORGANIZATION_ID
+                   AND RR2.FROM_OP_SEQ_NUM >= BCOMP.OPERATION_SEQ_NUM)
+       AND EXISTS
+               (SELECT 'X'
+                  FROM QA_PC_RESULTS_RELATIONSHIP PC
+                 WHERE     PC.CHILD_PLAN_ID = DD.PLAN_ID
+                       AND PC.CHILD_OCCURRENCE = DD.OCCURRENCE
+                       AND PC.CHILD_COLLECTION_ID = DD.COLLECTION_ID)
+       AND (   (    dd.WIP_ENTITY_ID = RR.WIP_ENTITY_ID
+                AND dd.FROM_OP_SEQ_NUM > rr.FROM_OP_SEQ_NUM)
+            OR (dd.wip_entity_id != RR.wip_entity_id))
+       --AND (RR.CHARACTER51 IN (:p_INSP) or '<ALL>' IN (:p_INSP))  --CYN%
+       --AND TO_DATE (RR.CHARACTER52, 'YYYY/MM/DD') between :p_INSP_START_DATE and :p_INSP_END_DATE --April 23
+       --AND DD.CREATION_DATE between :p_DD_START_DATE and :p_DD_END_DATE
+       --AND (MSI.SEGMENT1 = :p_ASSYNUM or :p_ASSYNUM is null) --987-9705-012+TL
+       --AND (RR.from_op_seq_num = :p_OPNUM or :p_OPNUM is null)--500
+       --and (RR.DEPARTMENT_ID IN (:p_DEPTID) OR 0 in (:p_DEPTID)) --6695
+

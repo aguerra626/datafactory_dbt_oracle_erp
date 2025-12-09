@@ -1,0 +1,1 @@
+{{oracle_get_profile('bom_departments','organization_id=1213','bd')}}

@@ -1,0 +1,2 @@
+select lookup_type as lookup_type_wt_transaction_type, lookup_code as lookup_code_wt_transaction_type, meaning as meaning_wt_transaction_type from apps.fnd_lookup_values
+where lookup_type = 'WIP_TRANSACTION_TYPE'

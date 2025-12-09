@@ -1,0 +1,7 @@
+{
+    "editor.fontSize": 16,
+    "dbt.perspectiveTheme": "Vintage",
+    "dbt.enableNewLineagePanel": true,
+    "dbt.lineage.defaultExpansion": 2,
+    "dbt.lineage.showNonSelectEdges": true
+}

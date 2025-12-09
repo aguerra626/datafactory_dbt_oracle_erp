@@ -1,0 +1,1 @@
+{{recommend_me_columns('wip_transaction_accounts','organization_id = 1213','wta')}}

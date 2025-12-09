@@ -1,0 +1,8 @@
+select * 
+from
+(select lookup_type as lookup_type_mtl_supply_demand_source_type, lookup_code as lookup_code_mtl_supply_demand_source_type, meaning as meaning_mtl_supply_demand_source_type from apps.fnd_lookup_values 
+where lookup_type = 'MTL_SUPPLY_DEMAND_SOURCE_TYPE')
+join
+(select lookup_type as lookup_type_mrp_supply_demand_source_type, lookup_code as lookup_code_mrp_supply_demand_source_type, meaning as meaning_mrp_supply_demand_source_type from apps.fnd_lookup_values 
+where lookup_type = 'MRP_SUPPLY_DEMAND_SOURCE_TYPE')
+on lookup_code_mtl_supply_demand_source_type = lookup_code_mrp_supply_demand_source_type

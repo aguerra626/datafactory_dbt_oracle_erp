@@ -1,0 +1,37 @@
+-- define business process: To track material, resource, overhead and outprocessing costs. Stores standard vs actual cost variances.
+
+SELECT
+wpb_organization_id,
+wpb_wip_entity_id,
+cur_material_var AS "cur material var",
+cur_moh_var AS "cur moh var",
+cur_resource_var AS "cur resource var",
+cur_osp_var AS "cur osp var",
+cur_overhead_var AS "cur overhead var",
+cur_shop_cost_var AS "cur shop cost var",
+material_in AS "material in",
+moh_in AS "moh in",
+resource_in AS "resource in",
+osp_in AS "osp in",
+overhead_in AS "overhead in",
+shop_cost_in AS "shop cost in",
+material_out AS "material out",
+moh_out AS "moh out",
+resource_out AS "resource out",
+osp_out AS "osp out",
+overhead_out AS "overhead out",
+shop_cost_out AS "shop cost out",
+material_var_orig AS "material var orig",
+moh_var_orig AS "moh var orig",
+resource_var_orig AS "resource var orig",
+osp_var_orig AS "osp var orig",
+overhead_var_orig AS "overhead var orig",
+shop_cost_var_orig AS "shop cost var orig",
+mtl_var_rlvd AS "mtl var rlvd",
+mtl_ovhd_var_rlvd AS "mtl ovhd var rlvd",
+res_var_rlvd AS "res var rlvd",
+osp_var_rlvd AS "osp var rlvd",
+ovhd_var_rlvd AS "ovhd var rlvd",
+shop_cost_var_rlvd AS "shop cost var rlvd"
+FROM {{ ref('stg_wpb') }} base
+

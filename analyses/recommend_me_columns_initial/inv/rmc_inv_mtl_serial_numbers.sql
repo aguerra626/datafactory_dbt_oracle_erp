@@ -1,0 +1,1 @@
+{{recommend_me_columns('mtl_serial_numbers','planning_organization_id=1213','sn')}}

@@ -1,0 +1,1 @@
+{{recommend_me_columns('mtl_onhand_quantities_detail','organization_id=1213','moqd')}}

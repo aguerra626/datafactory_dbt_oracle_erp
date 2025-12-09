@@ -1,0 +1,1 @@
+{{recommend_me_columns('oe_transaction_types_all',False,'lu_oe')}}

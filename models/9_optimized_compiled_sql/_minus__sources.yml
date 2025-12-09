@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: minus_wip_quality_summary_wip
+    description:
+      '''
+      Expected Output: A row per organization id per job per op step.
+      Script must only collect RELEASED jobs.
+      '''
+    columns:
+      - name: stg_wop_we_wdj_surrogate_key
+        description: ""
+        data_tests:
+          - unique
+  - name: minus_wip_quality_summary_quality
+    description: 
+      '''
+      Expected Output: A row per serial number per job per op step.
+      Known Issues: It is possible for results recording correct itself next business day. 
+      '''
+    columns:
+      - name: stg_qa_rr_wip_entity_id__from_op_seq_num_sk
+        description: "This is not defining the lowest level of detail. You can have multiple Serial Numbers within the same job and op step."
+        data_tests:
+          - unique
+      - name: stg_qa_rr_wip_entity_id__from_op_seq_num__serial_number_sk
+        description: "Lowest level of detail."
+        data_tests:
+          - unique
+  - name: minus_wip_valuation_conv_oh
+    description: 
+      '''
+      Declare Granularity: One row per job per op seq per resource transaction in debit to wip
+      '''
+    columns:
+      - name: transaction_id
+        description: ""
+        data_tests:
+          - unique
+  - name: Inspection_Escapes_Report_Modified
+    description: 
+      '''
+      '''

@@ -1,0 +1,6 @@
+SELECT
+    TRUNC (TO_DATE ('30-DEC-2023', 'DD-MON-YYYY'), 'MM') + LEVEL - 1 AS dense_dates
+FROM
+    dual
+CONNECT BY
+    LEVEL <= (TO_DATE ('31-DEC-2025', 'DD-MON-YYYY') - TO_DATE ('01-JAN-2024', 'DD-MON-YYYY') + 1)

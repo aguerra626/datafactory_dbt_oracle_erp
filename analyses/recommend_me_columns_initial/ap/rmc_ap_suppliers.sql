@@ -1,0 +1,1 @@
+{{recommend_me_columns('ap_suppliers',False,'s')}}

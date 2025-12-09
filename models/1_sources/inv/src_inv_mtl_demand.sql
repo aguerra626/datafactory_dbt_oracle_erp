@@ -1,0 +1,35 @@
+SELECT
+    demand_id AS md_demand_id,
+    organization_id AS md_organization_id,
+    inventory_item_id AS md_inventory_item_id,
+    demand_source_type AS md_demand_source_type,
+    demand_source_header_id AS md_demand_source_header_id,
+    demand_source_line AS md_demand_source_line,
+    uom_code AS md_uom_code,
+    line_item_quantity AS md_line_item_quantity,
+    primary_uom_quantity AS md_primary_uom_quantity,
+    completed_quantity AS md_completed_quantity,
+    requirement_date AS md_requirement_date,
+    reservation_type AS md_reservation_type,
+    last_update_date AS md_last_update_date,
+    last_updated_by AS md_last_updated_by,
+    creation_date AS md_creation_date,
+    created_by AS md_created_by,
+    last_update_login AS md_last_update_login,
+    request_id AS md_request_id,
+    program_application_id AS md_program_application_id,
+    program_id AS md_program_id,
+    program_update_date AS md_program_update_date,
+    parent_demand_id AS md_parent_demand_id,
+    supply_source_type AS md_supply_source_type,
+    supply_source_header_id AS md_supply_source_header_id,
+    subinventory AS md_subinventory,
+    locator_id AS md_locator_id,
+    available_to_mrp AS md_available_to_mrp,
+    available_to_atp AS md_available_to_atp,
+    row_status_flag AS md_row_status_flag,
+    n_column1 AS md_n_column1
+FROM
+    {{ source('inv', 'mtl_demand') }}
+WHERE
+    organization_id = 1213

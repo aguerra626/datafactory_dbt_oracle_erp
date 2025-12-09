@@ -1,0 +1,1 @@
+{{recommend_me_columns('bom_reference_designators',False,'bref')}}

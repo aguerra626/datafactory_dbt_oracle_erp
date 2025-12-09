@@ -1,0 +1,1 @@
+{{recommend_me_columns('cst_cost_types',False,'lu_cct')}}

@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "dbtPowerUser": {
+      "url": "http://localhost:7700/sse",
+      "type": "sse"
+    }
+  }
+}

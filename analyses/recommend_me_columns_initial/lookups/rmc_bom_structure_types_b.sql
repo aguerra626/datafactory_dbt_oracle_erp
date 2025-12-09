@@ -1,0 +1,1 @@
+{{recommend_me_columns('bom_structure_types_b',False,'bstb')}}

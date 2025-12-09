@@ -1,0 +1,1 @@
+{{recommend_me_columns('mtl_categories_b',False,'mc')}}

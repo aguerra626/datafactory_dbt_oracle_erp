@@ -1,0 +1,1 @@
+{{recommend_me_columns('mtl_item_locations','organization_id=1213','mil')}}

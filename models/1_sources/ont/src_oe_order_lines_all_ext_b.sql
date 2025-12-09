@@ -1,0 +1,26 @@
+select
+    n_ext_attr1 as oel_ext_b_n_ext_attr1,
+    extension_id as oel_ext_b_extension_id,
+    attr_group_id as oel_ext_b_attr_group_id,
+    line_id as oel_ext_b_line_id,
+    data_level_id as oel_ext_b_data_level_id,
+    entity as oel_ext_b_entity,
+    request_id as oel_ext_b_request_id,
+    last_update_date as oel_ext_b_last_update_date,
+    last_updated_by as oel_ext_b_last_updated_by,
+    last_update_login as oel_ext_b_last_update_login,
+    created_by as oel_ext_b_created_by,
+    creation_date as oel_ext_b_creation_date,
+    c_ext_attr1 as oel_ext_b_saasm_ops_sw_flag,
+    c_ext_attr2 as oel_ext_b_saasm_country,
+    c_ext_attr3 as oel_ext_b_saasm_application_type,
+    c_ext_attr4 as oel_ext_b_saasm_storage,
+    c_ext_attr5 as oel_ext_b_saasm_auth_control,
+    c_ext_attr6 as oel_ext_b_saasm_ship_to_sac_acc,
+    c_ext_attr7 as oel_ext_b_saasm_code,
+    c_ext_attr8 as oel_ext_b_is_vmi,
+    c_ext_attr9 as oel_ext_b_vmi_po,
+    c_ext_attr10 as oel_ext_b_vmi_item_no,
+    c_ext_attr11 as oel_ext_b_c_ext_attr11
+from
+    {{ source('ont', 'oe_order_lines_all_ext_b') }}

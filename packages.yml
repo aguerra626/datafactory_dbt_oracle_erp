@@ -1,0 +1,17 @@
+#packages:
+  #- package: dbt-labs/audit_helper
+  #  version: 0.12.1
+  # - package: kgmcquate/testgen
+  #   version: 1.0.3
+  # - package: dbt-labs/codegen
+  #   version: 0.13.1
+  # - package: dbt-msft/tsql_utils
+  #   version: 1.2.0
+  # - package: infinitelambda/audit_helper_ext
+  #   version: [">=0.1.0", "<1.0.0"]
+  # - package: infinitelambda/dq_tools
+  #   version: 1.10.1
+  # - package: data-mie/dbt_profiler
+  #   version: 0.8.4
+  
+

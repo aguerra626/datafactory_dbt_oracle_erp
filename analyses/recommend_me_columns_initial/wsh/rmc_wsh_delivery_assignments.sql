@@ -1,0 +1,1 @@
+{{recommend_me_columns('wsh_delivery_assignments',False,'wsh_da')}}

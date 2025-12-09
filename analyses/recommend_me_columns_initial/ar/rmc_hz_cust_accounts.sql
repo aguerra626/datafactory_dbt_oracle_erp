@@ -1,0 +1,1 @@
+{{recommend_me_columns('hz_cust_accounts',False,'hz_ca')}}

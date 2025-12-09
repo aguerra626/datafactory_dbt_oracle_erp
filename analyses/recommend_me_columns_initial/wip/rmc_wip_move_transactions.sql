@@ -1,0 +1,1 @@
+{{recommend_me_columns('wip_move_transactions','organization_id = 1213','wmt')}}

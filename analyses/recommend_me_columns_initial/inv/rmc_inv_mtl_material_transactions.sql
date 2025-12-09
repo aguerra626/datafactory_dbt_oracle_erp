@@ -1,0 +1,1 @@
+{{recommend_me_columns('mtl_material_transactions','organization_id=1213 and transaction_date >= sysdate - 365','mt')}}

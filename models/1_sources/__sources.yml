@@ -1,0 +1,368 @@
+version: 2
+
+sources:
+  - name: wip
+    description: ""
+    schema: apps
+    tables:
+      - name: wip_discrete_jobs
+        columns:
+          - name: class_code
+            description:
+              '''
+              To exclude NSS- repair jobs: CONVERSION,NONSTD-PRJ,Production,REWORK,TECH MKTG
+              NSS- repair jobs, warranty and others: ENG Y-LAB, NON-WTY, QLTYREWORK, WARRANTY, WRNTY_PROJ 
+              '''
+        description: ""
+      - name: wip_entities
+        description: ""
+      - name: wip_operations
+        description: ""
+      - name: wip_requirement_operations
+        description: ""
+      - name: wip_ws_comp_shortage
+        description: "Table to maintain component shortages information for Discrete MES"
+      - name: wip_move_transactions
+        description: "Tracks shop-floor transactions. Operation-level movements of material or assemblies within WIP. Type of moves(move to an operations, scrap, or completion)."
+        columns:
+          - name: transaction_id
+            description: "Unique identifier for transactions"
+            data_tests:
+              - unique
+          - name: source_code
+            description: "Source of the transaction like CONTEXT325, OA WIP SCRAP, OA TRANSACTION"
+      - name: wip_transaction_accounts
+        description: ""
+      - name: wip_transactions
+        description: ""
+      - name: wip_period_balances
+        description:
+          '''
+          1. Summing TL and PL columns get the total accrued cost for that job:
+          TL (This Level) = costs incurred directly at this job
+          PL (Previous Level) = costs inherited from child/subassembly jobs
+          TL + PL = Full cost accumulated in the job so far
+          2. Calculating costs at the parent top level assembly would given total accrued cost for that BOM
+          '''
+  - name: inv
+    description: ""
+    schema: apps
+    tables:
+      - name: mtl_system_items_b
+        description: ""
+      - name: mtl_planners
+        description: ""
+      - name: mtl_onhand_quantities_detail
+        description: ""
+      - name: mtl_serial_numbers
+        description: ""
+      - name: mtl_secondary_inventories
+        description: "the definition table for the subinventory. A subinventory is a section of inventory, i.e., raw material, finished goods, etc"
+      - name: mtl_material_transactions
+        description: ""
+      - name: mtl_transaction_reasons
+        description: ""
+      - name: mtl_item_locations
+        description: ""
+      - name: mtl_reservations
+        description: 
+          '''
+          Each record tracks inventory reservations by linking an item to a specific demand 
+          like sales order or work order and a supply source like inventory or a wip job.
+          The demand source includes details like its type, order number, and line item.
+          The supply source provides information on where the inventory is coming from including
+          stock location, lot number, and subinventory.
+          '''
+        columns:
+          - name: demand_source_type_id
+            description:
+              '''
+              Decode from inv.mtl_txn_source_types
+              Specifies the type of demand
+              2 = Sales Order, 3 = Account, 6 = Account alias,
+              8 = Internal order, 13 = Inventory
+              '''
+          - name: demand_source_header_id
+            description:
+              '''
+              Header identifier for source of demand.
+              Sales Order: DEMAND_SOURCE_HEADER_ID = OE_ORDER_HEADERS.HEADER_ID
+              INV Sales Order: DEMAND_SOURCE_HEADER_ID = MTL_SALES_ORDERS.SALES_ORDER_ID
+              Account: DEMAND_SOURCE_HEADER_ID = GL_CODE_COMBINATIONS.CODE_COMBINATION_ID
+              Account Alias: DEMAND_SOURCE_HEADER_ID = MTL_GENERIC_DISPOSITIONS.DISPOSITION_ID
+              '''
+          - name: supply_source_type_id
+            description:
+              '''
+              Decode from inv.mtl_txn_source_types
+              2 Reservations could exist on a WIP JOB. If WIP JOB partially completed. Reservation A would
+              populate source type 5 if qtys still in progress (not completed). Reservation B would populate
+              source type 13 if qtys completed (finished goods). 
+              Specifies the type of source
+              5 = Job or Schedule, 13 = Inventory
+              '''
+          - name: supply_source_header_id
+            description:
+              '''
+              Header identifier for source of supply.
+              WIP Job: SUPPLY_SOURCE_HEADER_ID = WIP_DISCRETE_JOBS.WIP_ENTITY_ID
+              '''
+      - name: mtl_sales_orders
+        description: 
+          '''
+          Inventorys local definition of sales orders. This table does not store all 
+          sales orders like OE_ORDER_HEADERS_ALL in Order Management (ONT) Module.
+          Additional customization can be configured on the flexfield code call MKTS.
+          Market Sales Orders (MKTS) is the flexfield code to configure navigate:
+            System Administrator > Application > Flexfield > Key > Segments.
+
+          '''
+        columns:
+          - name: sales_order_id
+            description: "Unique identifier of sales order in Inventory."
+      - name: mtl_item_categories
+        description: ""
+      - name: mtl_categories_b
+        description: ""
+      - name: mtl_category_sets_b
+        description: ""
+      - name: mtl_category_sets_tl
+        description: ""
+      - name: mtl_demand
+        description: ""
+      - name: mtl_demand_histories
+        description: ""
+  - name: qa
+    description: ""
+    schema: apps
+    tables:
+      - name: qa_results
+        description: ""
+      - name: qa_plans
+        description: ""
+      - name: qa_pc_results_relationship
+        description: ""
+      - name: qa_plan_char_value_lookups
+        description: ""
+      - name: qa_char_value_lookups
+        description: ""
+      - name: qa_plan_chars
+        description: ""
+  - name: bom
+    description: ""
+    schema: apps
+    tables:
+      - name: bom_components_b
+        description: "One row per component. Multiple components make up a subassembly."
+        columns:
+          - name: component_sequence_id
+            description: "Unique identifier for transactions"
+            data_tests:
+              - unique
+      - name: bom_structures_b
+        description: "One row per subassembly. Each subassembly is made up from multiple components."
+      - name: bom_calendar_dates
+        description: ""
+      - name: bom_reference_designators
+        description: ""
+        columns:
+          - name: component_sequence_id
+            description: "Unique identifier for transactions"
+            data_tests:
+              - unique
+      - name: bom_departments
+        description: ""
+      - name: bom_resources
+        description: ""
+      - name: bom_structure_types_b
+        description: ""
+      - name: cst_item_costs
+        description: 
+          '''
+          Stores item cost data, which is critical for inventory valuation, cost accounting, and financial reporting. 
+          To Track and Analyze item costs across multiple cost types like Frozen, Pending Average.
+          Support Inventory valuation methods (FIFO, LIFO, Weighted Average)
+          '''
+      - name: cst_item_cost_details
+        description: ""
+      - name: cst_cost_types
+        description: ""
+  - name: mrp
+    description: ""
+    schema: apps
+    tables:
+      - name: mrp_plans
+        description: ""
+      - name: mrp_recommendations
+        description: ""
+      - name: mrp_full_pegging
+        description: ""
+      - name: mrp_system_items
+        description: ""
+      - name: mrp_item_wip_entities
+        description: ""
+      - name: mrp_item_purchase_orders
+        description: ""
+      - name: mrp_gross_requirements
+        description: ""
+      - name: mrp_sales_order_updates
+        description: ""
+  - name: ont
+    description: ""
+    schema: apps
+    tables:
+      - name: oe_order_headers_all
+        description: ""
+        columns:
+          - name: order_number
+            description: ""
+            data_tests:
+              - unique
+          - name: header_id
+            description: ""
+            data_tests:
+              - unique
+      - name: oe_order_lines_all
+        description: ""
+      - name: oe_order_lines_all_ext_b
+        description: "Supports UDA report (User Defined Attributes)."
+        columns:
+          - name: c_ext_attr10
+            description: "Defined as vmi_item_no. For SAASM, '%966-%' "
+          - name: c_ext_attr10
+            description: "Defined as is_vmi. For SAASM, can be Y or NULL. SHOULD BE Y always however, this field is not a manditory field on user front end. "
+            
+  - name: gl
+    description: ""
+    schema: apps
+    tables:
+      - name: gl_periods
+        description: ""
+  - name: wsh
+    description: ""
+    schema: apps
+    tables:
+      - name: wsh_delivery_assignments
+        description: "assigns delivery details to a delivery and/or a parent delivery detail (LPN)."
+      - name: wsh_delivery_details
+        description: "has delivery lines and LPNs."
+        columns:
+          - name: source_line_id
+            description: "OE, WIP, or PO line identifier. For example, it can be sales order line ID."
+            data_tests:
+              - unique
+          - name: source_header_id
+            description: "For example, it can be sale order header ID"
+            data_tests:
+              - unique
+          - name: source_code
+            description:
+              '''
+              Possible values: OE/WIP/PO Defines origin of the delivery line.
+              # OE: Sales Orders from Order Management (Order Entry)
+              # WIP: Finished goods from WIP
+              # PO: Purcahses orders (common in drop shipment workflows)
+              '''
+            
+      - name: wsh_new_deliveries
+        description: "has the delivery records."
+  - name: ar
+    description: ""
+    schema: apps
+    tables:
+      - name: hz_cust_accounts
+        description: "stores information about customer accounts , or business relationships that the deploying company establishes with a party of type Organization or Person"
+      - name: hz_parties
+        description: ""
+  - name: applsys
+    description: ""
+    schema: apps
+    tables:
+      - name: fnd_tables
+        description: ""
+      - name: fnd_user
+        description: ""
+      - name: fnd_columns
+        description: ""
+      - name: fnd_lookup_values
+        description: ""
+  - name: ego
+    description: 
+      '''
+      Engineering and General Objects (EGO) association with Advanced Product Catalog (APC) 
+      and Product Information Management (PIM). Main focus to manage item definitions, attributes, 
+      classifications and related product data
+      '''
+    schema: apps
+    tables:
+      - name: ego_attr_groups_v
+        description: "Cant run view source code. These are the source tables the view is based on: select * from apps.FND_DESCR_FLEX_CONTEXTS; select * from apps.EGO_FND_DSC_FLX_CTX_EXT;select * from apps.FND_DESCR_FLEX_CONTEXTS_TL;select * from apps.FND_LOOKUP_VALUES where lookup_type like 'EGO_EF_S%'; "
+  - name: bae
+    description: ""
+    schema: apps
+    tables:
+      - name: bae_context303_serial_numbers
+        description: ""
+      - name: bae_context001_exploded_boms
+        description: ""
+  - name: ap
+    description: "responsible for managing an organization’s obligations to its suppliers. It handles everything from supplier setup and invoice entry to payment processing and reporting."
+    schema: apps
+    tables:
+      - name: ap_suppliers
+        description: ""
+
+models:
+  - name: src_oe_order_headers_all
+    description: ""
+    columns:
+      - name: oeh_order_number
+        description: ""
+        data_tests:
+          - unique
+      - name: oeh_header_id
+        description: ""
+        data_tests:
+          - unique
+  - name: src_inv_mtl_reservations
+    description: ""
+  - name: src_qa_results_rr__reject_reroute__opendef_greaterthan0__90days
+    description: ""
+    columns:
+      - name: rr_open_def
+        description: ""
+        data_tests:
+          - not_null
+      - name: rr_serial_number
+        description: ""
+        data_tests:
+          - unique
+  - name: src_inv_mtl_onhand_quantities_detail
+    description: ""
+  - name: lu_mtl_txn_source_types
+    description: ""
+  - name: lu_mtl_mtl_transaction_types
+    description: ""
+  - name: lu_oe_transaction_types_all
+    description: ""
+  - name: lu_oe_transaction_types_tl
+    description: "This table stores information about the order and line transaction types"
+    columns:
+      - name: lu_oe_name
+        description: "Decode value of transaction type id in orders or lines."
+  - name: lu_wdj_job_type
+    description: ""
+  - name: lu_wdj_status_type
+    description: ""
+  - name: lu_wdj_wip_supply_type
+    description: ""
+  - name: lu_we_entity_types
+    description: ""
+  - name: lu_wt_wip_transaction_type
+    description: ""
+  - name: lu_wta_cst_accounting_line_type
+    description: ""
+
+
+
+      

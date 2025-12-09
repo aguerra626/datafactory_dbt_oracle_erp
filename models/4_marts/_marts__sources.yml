@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: move_trxns_on_floor
+    description: "Model for integrating move transactions on the floor, focusing on WIP operations and inventory items."
+    columns:
+      - name: TRANSACTION DATE CST
+        description: "Transaction date converted to Central Standard Time (CST)."
+      - name: START DAILY RATE DATE
+        description: "Transaction date converted to UTC -02 time zone for Shift Time starting 9PM CST"
+      - name: PART NUMBER GROUP
+        description: "Categorized group of part numbers based on specific programs."
+      - name: PART NUMBER
+        description: "Part Number that is meaningful to end-users."
+      - name: PART DESCRIPTION
+        description: "Description of the part."
+      - name: FM OP SEQ NUM
+        description: "Sequence number of the operation in the wip process."
+      - name: FM OP DESC
+        description: "Description of the operation in the wip process."
+      - name: TRANSACTION QUANTITY
+        description: "Total quantity involved in the transaction."
+  - name: actuals_build
+    description: ""
+  - name: actuals_delivery
+    description: ""
+  - name: actuals_build_delivery
+    description: ""
+  - name: build2plan
+    description: ""
+  - name: saasm_from_vmi_sales_planned_qtys
+    description: "COLUMNS WITH SPACES DO NOT WORK FOR TEST. COMPILE CODE FAILS SYNTAX"
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests: 
+          - unique
+  - name: saasm_for_top_level_sales_planned_qtys
+    description: "COLUMNS WITH SPACES DO NOT WORK FOR TEST. COMPILE CODE FAILS SYNTAX"
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests: 
+          - unique
+  - name: lead_times_analysis_full7day_week
+    description: ""
+    columns:
+      - name: wip_assembly_completions_sk
+        description: "one row per job per day"
+        data_tests:
+          - unique
+  - name: lead_times_analysis_workingdays_week
+    description: ""
+    columns:
+      - name: wip_assembly_completions_sk
+        description: "one row per job per day"
+        data_tests:
+          - unique
+  - name: lead_times_analysis_final
+    description: ""
+    columns:
+      - name: wip_assembly_completions_sk
+        description: "one row per job per day"
+        data_tests:
+          - unique
+  - name: dim_quality_defect_details_and_results_recording
+    description: "Defect Details does not store RR (reroutes). Since this model starts at Defect Details and LEFT JOINs to RESULTS RECORDING the Reroutes are dropped."
+  - name: dim_wip_reservations_on_sales_orders
+    description: ""
+    columns:
+      - name: mr_demand_source_header_id
+        description: ""
+        data_tests:
+          - unique
+      - name: mr_supply_source_header_id
+        description: ""
+        data_tests:
+          - unique
+  - name: fct_wip_jobs
+    description: ""
+    columns:
+      - name: wip_job_sk
+        description: ""
+        data_tests:
+          - unique
+  - name: dim_item_master
+    description: ""
+    columns:
+      - name: item_master_sk
+        description: ""
+        data_tests:
+          - unique
+  

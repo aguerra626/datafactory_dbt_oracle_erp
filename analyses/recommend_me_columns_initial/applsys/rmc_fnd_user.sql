@@ -1,0 +1,1 @@
+{{recommend_me_columns('fnd_user',False,'fu')}}

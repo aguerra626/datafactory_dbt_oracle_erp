@@ -1,0 +1,189 @@
+version: 2
+
+models:
+  - name: int_move_trxns_dynamic_daily_rate
+    description: "Model for integrating move transactions on the floor, focusing on WIP operations and inventory items."
+    columns:
+      - name: transacted_at_cst
+        description: "Transaction date converted to Central Standard Time (CST)."
+      - name: shift_start_at
+        description: "Transaction date converted for Shift Start Date"
+      - name: part_number_group
+        description: "Categorized group of part numbers based on specific programs."
+      - name: msib_segment1
+        description: "Part Number that is meaningful to end-users."
+      - name: msib_description
+        description: "Description of the part."
+      - name: wmt_fm_operation_seq_num
+        description: "Sequence number of the operation in the wip process."
+      - name: wop_fm_description
+        description: "Description of the operation in the wip process."
+      - name: wmt_transaction_quantity
+        description: "Total quantity involved in the transaction."
+  - name: int_wip_nettable_credit_op_step_for_queue_to_move_types
+    description: ""
+    columns:
+      - name: wmt_transaction_id
+        description: ""
+        data_tests:
+          - unique
+  - name: int_agg_move_trxns
+    description: ""
+    columns:
+      - name: wmt_min_transaction_id_surrogate_key
+        description: ""
+        data_tests:
+          - unique
+  - name: int_saasm_top_level_sales_lines_and_deliveries
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+      - name: oeh_flow_status_code
+        description: ""
+        data_tests:
+          - accepted_values:
+              values: ['CLOSED','BOOKED','ENTERED']
+      - name: oel_flow_status_code
+        description: ""
+      - name: oel_ext_b_is_vmi
+        description: 
+          '''
+          Custom user entry text field. Best practice is for user to enter Y for vmis. however, that is 
+          sometimes not always the case. But after using !=N or =Y tests, it resultant in no difference.
+          '''
+  - name: int_saasm_top_level_sales_lines
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+      - name: oeh_flow_status_code
+        description: ""
+        data_tests:
+          - accepted_values:
+              values: ['CLOSED','BOOKED','ENTERED']
+      - name: oel_flow_status_code
+        description: ""
+      - name: oel_ext_b_is_vmi
+        description: 
+          '''
+          Custom user entry text field. Best practice is for user to enter Y for vmis. however, that is 
+          sometimes not always the case. But after using !=N or =Y tests, it resultant in no difference.
+          '''
+  - name: int_saasm_sales_lines_and_deliveries
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: "1 duplicate after apply SAASM filters"
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+  - name: seed_saasm_from_sap_values
+    description: ""
+  - name: int_horizontal_wip
+    description: ""
+    columns:
+      - name: stg_wop_we_wdj_surrogate_key
+        description: ""
+        data_tests:
+          - unique
+  - name: int_wip_quality_summary_quality
+    description: ""
+    columns:
+      - name: rr_open_def
+        description: ""
+        data_tests:
+          - not_null
+  - name: int_wip_quality_summary_wip
+    description: ""
+    columns:
+      - name: stg_wop_we_wdj_surrogate_key
+        description: ""
+        data_tests:
+          - unique
+  - name: int_item_program_details
+    description: ""
+    columns:
+      - name: mic_inventory_item_id
+        description: ""
+        data_tests:
+          - unique
+  - name: int_fiscal_calendar
+    description: ""
+    columns:
+      - name: bcal_seq_num
+        description: ""
+        data_tests:
+          - unique
+  - name: int_mrp_monthly_snapshot_delivery
+    description: ""
+    columns:
+      - name: rec_transaction_id
+        description: ""
+        data_tests:
+          - unique
+  - name: int_move_trxns_wip_job_start
+    description: ""
+    columns:
+      - name: int_move_trxns_wip_job_start_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: we_wip_entity_id
+        description: ""
+        data_tests:
+          - unique
+      - name: wmt_min_transaction_date
+        description: ""
+        data_tests:
+          - not_null
+  - name: int_wip_assembly_completions
+    description: ""
+    columns:
+      - name: int_wip_assembly_completions_sk
+        description: "wip entity id concat transaction date. Every row should represent a unique job per day"
+        data_tests:
+          - unique
+      - name: mt44_transaction_date
+        description: ""
+        data_tests:
+          - not_null
+  - name: int_wip_quality_summary_quality_rejects_and_sales_orders
+    description: ""
+    columns:
+      - name: rr_item_id__rr_wip_entity_id__rr_from_op_seq_num_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: rr_item_id__rr_wip_entity_id__rr_from_op_seq_num__op_desc_sk
+        description: ""
+        data_tests:
+          - unique
+  - name: int_wip_quality_summary_quality_reroutes_and_sales_orders
+    description: ""
+    columns:
+      - name: rr_item_id__rr_wip_entity_id__rr_from_op_seq_num_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: rr_item_id__rr_wip_entity_id__rr_from_op_seq_num__op_desc_sk
+        description: ""
+        data_tests:
+          - unique
+  - name: int_wip_valuation_conversion_overhead
+    description: ""

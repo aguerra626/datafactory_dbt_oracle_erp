@@ -1,0 +1,1 @@
+{{recommend_me_columns('wsh_new_deliveries','ORGANIZATION_ID=1213','wsh_nd')}}

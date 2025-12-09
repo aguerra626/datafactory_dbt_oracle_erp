@@ -1,0 +1,9 @@
+﻿item_type,inventory_type
+ATO Assembly,FG
+Bulk Issue Item,P-Stock
+Buy Subassembly,P-Stock
+Finished good,FG
+Raw Material,P-Stock
+Serialized Subassembly,C-WIP
+Subassembly,C-WIP
+Unserialized Subassembly ,C-WIP

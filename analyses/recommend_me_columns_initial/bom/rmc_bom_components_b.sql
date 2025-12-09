@@ -1,0 +1,1 @@
+{{recommend_me_columns('bom_components_b',False,'bcomp')}}

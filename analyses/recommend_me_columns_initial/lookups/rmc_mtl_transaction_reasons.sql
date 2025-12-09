@@ -1,0 +1,1 @@
+{{recommend_me_columns('mtl_transaction_reasons',False,'lu_mtl_tr')}}

@@ -1,0 +1,1 @@
+{{recommend_me_columns('cst_item_cost_details','organization_id=1213','cicd')}}

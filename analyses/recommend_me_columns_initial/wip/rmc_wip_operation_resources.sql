@@ -1,0 +1,1 @@
+{{recommend_me_columns('wip_operation_resources','organization_id = 1213','wor')}}

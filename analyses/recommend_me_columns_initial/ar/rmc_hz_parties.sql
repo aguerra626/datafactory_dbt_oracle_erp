@@ -1,0 +1,1 @@
+{{recommend_me_columns('hz_parties',False,'hz_p')}}

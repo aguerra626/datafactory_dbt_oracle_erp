@@ -1,0 +1,1 @@
+{{recommend_me_columns('bom_structures_b','organization_id=1213','boms')}}

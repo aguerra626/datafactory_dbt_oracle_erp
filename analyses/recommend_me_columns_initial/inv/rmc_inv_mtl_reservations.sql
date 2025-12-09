@@ -1,0 +1,1 @@
+{{recommend_me_columns('mtl_reservations','organization_id=1213','mr')}}

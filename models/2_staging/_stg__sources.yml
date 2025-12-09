@@ -1,0 +1,316 @@
+version: 2
+
+models:
+  - name: stg_we_wdj_msib
+    description: "Staging model for integrating wip_entities, wip_discrete_jobs, mtl_system_items_b"
+    columns:
+      - name: we_wip_entity_id
+        description: "Unique identifier for a job in wip_entities"
+        data_tests:
+          - unique
+      - name: we_organization_id
+        description: "Unique identifier for organization"
+      - name: we_primary_item_id
+        description: "Unique identifier for the wip assembly within a job"
+      - name: we_wip_entity_name
+        description: "The end-user meaningful column name that represents a job number"
+      - name: wdj_wip_entity_id
+        description: "Unique identifier for a job in wip_discrete_jobs"
+        data_tests:
+          - unique
+      - name: wdj_organization_id
+        description: "Unique identifier for organization"
+      - name: wdj_primary_item_id
+        description: "Unique identifier for the wip assembly within a job"
+  - name: stg_from_wop_we_wdj
+    description: "Staging model for intergrating wop_operations with stg_we_wdj_msib"
+    columns:
+      - name: stg_from_wop_we_wdj_surrogate_key
+        description: "Derived primary key using hash function MD5"
+        data_tests:
+          - unique
+  - name: stg_wop_we_wdj_msib
+    description: "Staging model for intergrating wop_operations with stg_we_wdj_msib"
+    columns:
+      - name: stg_wop_we_wdj_surrogate_key
+        description: "Derived primary key using hash function MD5"
+        data_tests:
+          - unique
+  - name: stg_we_wdj_fm_wop
+    description: "Staging model for intergrating wop_operations with stg_we_wdj_msib"
+    columns:
+      - name: stg_wop_we_wdj_surrogate_key
+        description: "Derived primary key using hash function MD5"
+        data_tests:
+          - unique
+  - name: stg_wop_we_wdj_msib_mp_bd
+    description: "Staging model for intergrating wop_operations with stg_we_wdj_msib"
+    columns:
+      - name: stg_wop_we_wdj_surrogate_key
+        description: "Derived primary key using hash function MD5"
+        data_tests:
+          - unique
+  - name: stg_wop_we_wdj_msib_mp_bd_lf_mr_lf_mso_lf_oel
+    description: "Staging model for intergrating wop_operations with stg_we_wdj_msib"
+    columns:
+      - name: stg_wop_we_wdj_surrogate_key
+        description: "Derived primary key using hash function MD5"
+        data_tests:
+          - unique
+  - name: stg_from_wop_we_wdj_wmt
+    description: "Staging model for intergrating via INNER JOIN wip_move_transactions with stg_from_wop_we_wdj"
+    columns:
+      - name: wmt_transaction_id
+        description: "You can perform multiple transactions to a single job or op seq num. Each transaciton is uniquely identified."
+        data_tests:
+          - unique
+  - name: stg_we_wdj_msib_mt44
+    description: ""
+    columns:
+      - name: mt44_transaction_id
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_we_wdj_wmt
+    description: ""
+    columns:
+      - name: wmt_transaction_id
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_we_wdj_wt
+    description: ""
+    columns:
+      - name: wt_transaction_id
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_we_wdj_wt_wta
+    description: ""
+    columns:
+      - name: wt_transaction_id
+        description: ""
+        data_tests:
+          - unique
+      - name: wta_transaction_id
+        description: ""
+        data_tests:
+          - unique
+      - name: wta_resource_id
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_we_wdj_wmt_fm_to_wop
+    description: ""
+    columns:
+      - name: wmt_transaction_id
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_qa_dd
+    description: ""
+    columns:
+      - name: dd_status
+        description: "TO-DO: write custom test script. This one does not work.Validation snippet given by Dave MacQueen (Oracle Consultant): (DD.STATUS IS NULL OR DD.STATUS = 2) (In progress and completed forms)"
+        data_tests:
+          - accepted_values:
+              values: [null,2]
+  - name: stg_oeh_oel
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_oeh_oel_oel_ext_b
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_oeh_oel_msib_mp
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_oeh_oel_wsh_dd_da_nd
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: "There could be multiple delivery details against a sales order line number"
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_wsh_dd_da_nd_sk
+        description: "Surrogate key that is a unique identifier"
+        data_tests:
+          - unique
+  - name: stg_wsh_dd_da_nd
+    description: ""
+    columns:
+      - name: wsh_dd_delivery_detail_id
+        description: "Unique Identifier"
+        data_tests:
+          - unique
+      - name: wsh_da_delivery_id
+        description: "Not defined uniquely in this model."
+        data_tests:
+          - unique
+  - name: stg_oeh_oel_hz_ca_p_lf_msib_mp
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_oeh_oel_msib_lf_mp
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_oeh_oel_msib_lf_mp_hz_ca_p
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_oeh_oel_msib_lf_mp_hz_ca_p_oel_ext_b
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_oeh_oel_msib_lf_mp_hz_ca_p_lf_wsh_dd_da_nd
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: "After join with delivery duplicates generated. Duplicates are assumed to be dealt with later upstream."
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_oeh_oel_msib_lf_mp_hz_ca_p_oel_ext_b_lf_wsh_dd_da_nd
+    description: ""
+    columns:
+      - name: stg_oeh_oel_sk
+        description: "After join with delivery duplicates generated. Duplicates are assumed to be dealt with later upstream."
+        data_tests:
+          - unique
+      - name: stg_oeh_oel_sk2
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_qa_rr_type_a_we_wdj_msib_mp
+    description: "QA Results Recording given alias type_a"
+    columns:
+      - name: wip_entity_id
+        description: ""
+        data_tests:
+          - unique
+      - name: occurrence
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_qa_results_reject_reroute__wop
+    description: ""
+    columns:
+      - name: rr_serial_number
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_mtl_mic_mcs_mcst_mc
+    description: "Staging table for program data related to inventory"
+    columns:
+      - name: mic_inventory_item_id
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_wip_quality_summary_quality_rejects
+    description: ""
+    columns:
+      - name: rr_item_id__rr_wip_entity_id__rr_from_op_seq_num_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: rr_item_id__rr_wip_entity_id__rr_from_op_seq_num__op_desc_sk
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_wip_quality_summary_quality_reroutes
+    description: ""
+    columns:
+      - name: rr_item_id__rr_wip_entity_id__rr_from_op_seq_num_sk
+        description: ""
+        data_tests:
+          - unique
+      - name: rr_item_id__rr_wip_entity_id__rr_from_op_seq_num__op_desc_sk
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_mrp_fiscal_delivery
+    description: "Staging table for program data related to inventory"
+    columns:
+      - name: rec_transaction_id
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_mr_mso_oel
+    description: ""
+    columns:
+      - name: mr_demand_source_header_id
+        description: ""
+        data_tests:
+          - unique
+      - name: mr_supply_source_header_id
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_boms_bcomp_bref
+    description: ""
+    columns:
+      - name: stg_boms_bcomp_bref_sk
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_boms_bcomp
+    description: ""
+    columns:
+      - name: bcomp_component_sequence_id
+        description: ""
+        data_tests:
+          - unique
+  - name: stg_bref
+    description: ""
+    columns:
+      - name: bref_component_sequence_id
+        description: ""
+        data_tests:
+          - unique

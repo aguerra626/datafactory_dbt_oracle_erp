@@ -1,0 +1,45 @@
+select
+    material_overhead_cost as cic_material_overhead_cost,
+    pl_item_cost as cic_pl_item_cost,
+    tl_item_cost as cic_tl_item_cost,
+    item_cost as cic_item_cost,
+    unburdened_cost as cic_unburdened_cost,
+    burden_cost as cic_burden_cost,
+    request_id as cic_request_id,
+    program_application_id as cic_program_application_id,
+    program_id as cic_program_id,
+    program_update_date as cic_program_update_date,
+    rollup_id as cic_rollup_id,
+    inventory_item_id as cic_inventory_item_id,
+    organization_id as cic_organization_id,
+    cost_type_id as cic_cost_type_id,
+    lu_cct_cost_type,
+    lu_cct_description,
+    last_update_date as cic_last_update_date,
+    last_updated_by as cic_last_updated_by,
+    creation_date as cic_creation_date,
+    created_by as cic_created_by,
+    last_update_login as cic_last_update_login,
+    inventory_asset_flag as cic_inventory_asset_flag,
+    lot_size as cic_lot_size,
+    based_on_rollup_flag as cic_based_on_rollup_flag,
+    shrinkage_rate as cic_shrinkage_rate,
+    defaulted_flag as cic_defaulted_flag,
+    cost_update_id as cic_cost_update_id,
+    pl_material as cic_pl_material,
+    pl_material_overhead as cic_pl_material_overhead,
+    pl_resource as cic_pl_resource,
+    pl_outside_processing as cic_pl_outside_processing,
+    pl_overhead as cic_pl_overhead,
+    tl_material as cic_tl_material,
+    tl_material_overhead as cic_tl_material_overhead,
+    tl_resource as cic_tl_resource,
+    tl_outside_processing as cic_tl_outside_processing,
+    tl_overhead as cic_tl_overhead,
+    material_cost as cic_material_cost
+from
+    {{ source('bom', 'cst_item_costs') }}
+join {{ ref('lu_bom_cst_cost_types') }}
+on cost_type_id = lu_cct_cost_type_id
+where
+    organization_id = 1213

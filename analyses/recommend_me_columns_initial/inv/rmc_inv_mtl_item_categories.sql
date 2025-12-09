@@ -1,0 +1,1 @@
+{{recommend_me_columns('mtl_item_categories','organization_id=1213','mic')}}

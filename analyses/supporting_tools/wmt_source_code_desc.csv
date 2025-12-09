@@ -1,0 +1,4 @@
+source_code, description
+CONTEXT325, Mass Accept- Allows users to select a group of serial numbers that require inspection and perform a mass approval
+CONTEXT299, Mass Reject/Scrap- For Rejects: program process updates thru Quality interface and no move transaction occurs. For Scrap: program does four things 1. Updates Job/Op/Serial Number with Scrap 2. Updates subsequent operations/serial number with inspection result NA_SM 3. Inserts records into WIP_MOVE_TXN_INTERFACE for each job/opstep/sn to move from current operation to the last operation's Scrap intraoperation step 4. Launch WIP Move Trxns Manager to process the records in the interface.
+CONTINT111, Aegis FactoryLogix WIP Integration (for sites Endicott and Fort Wayne)

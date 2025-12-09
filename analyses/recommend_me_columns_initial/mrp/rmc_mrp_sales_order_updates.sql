@@ -1,0 +1,1 @@
+{{recommend_me_columns('mrp_sales_order_updates','organization_id=1213','msou')}}

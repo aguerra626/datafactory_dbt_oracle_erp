@@ -1,0 +1,2 @@
+select lookup_type as lookup_type_wta_cst_accounting_line_type, lookup_code as lookup_code_wta_cst_accounting_line_type, meaning as meaning_wta_cst_accounting_line_type from apps.fnd_lookup_values
+where lookup_type = 'CST_ACCOUNTING_LINE_TYPE'
