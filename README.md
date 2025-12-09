@@ -1,3 +1,5 @@
+# Intro
+My dbt development since 2022. Apply Dimensional Design principles to develop SQL modularized architecture from source - staging - intermediate - marts - dim and fct. With 335 models, 82 analyses, 33 seeds, 86 data tests, 66 sources, and 482 macros, I developed robust, idempotent, refungible data pipelines that support production level applications for downstream business intelligence consumption answering the toughest questions and problems for the ERP system of the enterprise.
 Welcome to your new dbt project!
 
 ### Using the starter project
